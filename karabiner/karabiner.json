@@ -1,0 +1,104 @@
+{
+  "profiles": [
+    {
+      "complex_modifications": {
+        "rules": [
+          {
+            "manipulators": [
+              {
+                "description": "Change right_shift to hyper.",
+                "from": {
+                  "key_code": "right_shift",
+                  "modifiers": { "optional": [] }
+                },
+                "to": [
+                  {
+                    "key_code": "right_shift",
+                    "modifiers": ["command", "control", "option"]
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "Change right_shift+command to hyper-command.",
+                "from": {
+                  "key_code": "right_shift",
+                  "modifiers": { "mandatory": ["command"] }
+                },
+                "to": [
+                  {
+                    "key_code": "right_shift",
+                    "modifiers": ["control", "option"]
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "Change right_shift+control to hyper-control.",
+                "from": {
+                  "key_code": "right_shift",
+                  "modifiers": { "mandatory": ["control"] }
+                },
+                "to": [
+                  {
+                    "key_code": "right_shift",
+                    "modifiers": ["command", "option"]
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "Change right_shift+option to hyper-option.",
+                "from": {
+                  "key_code": "right_shift",
+                  "modifiers": { "mandatory": ["option"] }
+                },
+                "to": [
+                  {
+                    "key_code": "right_shift",
+                    "modifiers": ["command", "control"]
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "Change caps_lock to left_control if pressed with other keys, change caps_lock to escape if pressed alone.",
+            "manipulators": [
+              {
+                "from": {
+                  "key_code": "caps_lock",
+                  "modifiers": { "optional": ["any"] }
+                },
+                "to": [{ "key_code": "left_control" }],
+                "to_if_alone": [{ "key_code": "escape" }],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "Change left_shift to backtick if pressed alone, leave it as left_shift if pressed with other keys",
+            "manipulators": [
+              {
+                "from": {
+                  "key_code": "left_shift",
+                  "modifiers": { "optional": ["any"] }
+                },
+                "to": [{ "key_code": "left_shift" }],
+                "to_if_alone": [{ "key_code": "grave_accent_and_tilde" }],
+                "type": "basic"
+              }
+            ]
+          }
+        ]
+      },
+      "name": "Default profile",
+      "selected": true,
+      "virtual_hid_keyboard": {
+        "country_code": 0,
+        "keyboard_type_v2": "ansi"
+      }
+    }
+  ]
+}
