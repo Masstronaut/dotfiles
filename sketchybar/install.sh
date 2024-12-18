@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 # Add the sketchybar cask and install it
 brew tap FelixKratz/formulae
@@ -29,4 +29,5 @@ chmod +x ~/.config/sketchybar/plugins/icon_map_fn.sh
 chmod +x ~/.config/sketchybar/sketchbarrc
 
 # Start the sketchybar service
-brew services start sketchybar
+# NOTE: This is commented out because it's launched by aerospace now. Uncomment if you want to start it manually or aren't using aerospace
+# brew services start sketchybar
