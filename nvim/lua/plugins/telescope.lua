@@ -33,6 +33,7 @@ return {
           ["ui-select"] = {
             require("telescope.themes").get_dropdown({}),
           },
+          fzf = {},
         },
         pickers = {
           find_files = {
@@ -40,6 +41,10 @@ return {
           },
         },
       })
+
+      -- Loads the native fzf extension for faster searching:w
+      require("telescope").load_extension("fzf")
+
       require("telescope").load_extension("ui-select")
       require("telescope").load_extension("noice")
     end,
