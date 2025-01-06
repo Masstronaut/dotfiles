@@ -57,7 +57,6 @@ create_workspace() {
       drawing="on"
     fi
 
-    echo "Drawing is $drawing for space $sid" >> /tmp/aerospace.log
     # Create the workspace item for the provided space ID
     sketchybar --add item workspace.$sid left \
         --set workspace.$sid \
@@ -105,11 +104,9 @@ create_aerospace_workspaces() {
 # - FOCUSED_WORKSPACE: The ID of the workspace that is becoming focused
 # - PREV_WORKSPACE: The ID of the workspace that was previously focused
 handle_workspace_change() {
-  echo "Switching to workspace.$FOCUSED_WORKSPACE from workspace.$PREV_WORKSPACE in the $NAME handler" >> /tmp/aerospace.log
   
-  set_workspace_unfocused "$PREV_WORKSPACE"
   set_workspace_focused "$FOCUSED_WORKSPACE"
-  echo "$NAME handle workspace change completed" >> /tmp/aerospace.log
+  set_workspace_unfocused "$PREV_WORKSPACE"
 }
 
 # Expects the workspace id as the first argument
@@ -123,17 +120,17 @@ set_workspace_focused() {
 
 # Expects the workspace id as the first argument
 set_workspace_unfocused() {
-  local drawing="on"
-  # if the previous workspace has no windows, hide it
-  if [[ -n "$(aerospace list-windows --workspace $1)" ]]; then
-    drawing=on
-  else
-    drawing=off
-  fi
-
+  # First, set it to unfocused colors (very fast)
   sketchybar --set workspace."$1" \
                          background.color="$ITEM_BG_COLOR" \
                          label.color=0xFF$MUTED \
                          icon.background.color="0xFF$SUBTLE" \
                          background.border_color="0xFF$SUBTLE"
+
+  #Afterwards, hide it if it has no windows (slower perf)
+  # -z means "empty" - ie the workspace has no windows
+  if [[ -z "$(aerospace list-windows --workspace $1)" ]]; then
+    sketchybar --set workspace."$1" drawing=off
+  fi
+
 }
