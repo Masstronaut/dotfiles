@@ -84,12 +84,29 @@ create_workspace() {
         script="$CONFIG_DIR/plugins/aerospace.sh $sid"
 
 }
+sort_alphanumeric() {
+  # Read input from positional argument
+  local input=($(echo "$1" | tr ' ' '\n'))
 
+  # Process input: remove duplicates and sort
+  printf "%s\n" "${input[@]}" | sort -u
+}
+list_active_workspaces() {
+  local window_workspaces=$(aerospace list-windows --monitor all --format %{workspace})
+  window_workspaces="$window_workspaces"$'\n'"$(aerospace list-workspaces --focused)"
+  sort_alphanumeric "$window_workspaces" 
+}
 
 # Create all of the workspace items
 create_aerospace_workspaces() {
   local focused_workspace=$(aerospace list-workspaces --focused)
-  for sid in $(aerospace list-workspaces --all); do
+  local active_workspaces=$( list_active_workspaces )
+
+  # lazy initialization of workspaces helps sketchybar startup times.
+  # Only create a workspace item once the workspace is focused or has a window in it
+  for sid in $active_workspaces; do
+    # log the execution time of the function in a log file
+    # { echo -n "creating workspace $sid. Timing: "; time create_workspace $sid; } 2>&1 | tee -a /tmp/sketchybar.log
     create_workspace $sid
     if [ $sid = $focused_workspace ]; then
       set_workspace_focused $sid
@@ -109,8 +126,46 @@ handle_workspace_change() {
   set_workspace_unfocused "$PREV_WORKSPACE"
 }
 
+# Use this to detect if an item needs to be created
+sketchybar_item_exists() {
+  local item_name="$1"
+  
+  # Check if the item exists in SketchyBar's list of items
+  if sketchybar --query "$item_name" &>/dev/null; then
+    return 0  # Item exists
+  else
+    return 1  # Item does not exist
+  fi
+}
+
+# Generates a sketchybar --reorder command to correctly sort workspace items
+# This should be used whenever a new workspace item is created after initialization
+# to ensure that the workspace items are sorted in the correct order
+order_workspace_items() {
+  # Read input from positional argument
+  local input=($(echo "$1" | tr ' ' '\n'))
+
+  # Process input: remove duplicates and sort
+  local sorted=($(printf "%s\n" "${input[@]}" | sort -u))
+
+  # Expand into sketchybar --reorder format
+  printf "sketchybar --reorder"
+  for item in "${sorted[@]}"; do
+    printf " \"workspace.%s\"" "$item"
+  done
+  printf " workspace_separator front_app \n"
+}
+
+
 # Expects the workspace id as the first argument
 set_workspace_focused() {
+  if ! sketchybar_item_exists "workspace.$1"; then
+    create_workspace $1
+    local active_workspaces=$( list_active_workspaces )
+    local reorder_workspace_items_command=$(order_workspace_items "$active_workspaces" )
+    echo "reorder command: $reorder_workspace_items_command" >> /tmp/sketchybar.log
+    eval "$reorder_workspace_items_command"
+  fi
   # show the focused workspace no matter what
   sketchybar --set workspace."$1" drawing=on \
                          label.color=$ACCENT_COLOR \
