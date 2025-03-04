@@ -60,9 +60,12 @@ return {
 					LineNr1 = { fg = "foam" },
 					CursorLine = { bg = "surface" },
 					NotifyBackground = { bg = "surface" }, -- nvim-notify background
+					-- this highlight group is used by colorful-winsep.nvim to set a border color on active window
+					NvimSeparator = { fg = "rose" },
 					--[[ this generates an error in the rose-pine highlighter fn
         LineNrCurr = { fg = "#BDEEF9", style = { "bold" } },
       ]]
+					-- ActiveWindow = { bg = "base" }, -- make the active window bg opaque
 				},
 				before_highlight = function(group, highlight, palette)
 					-- Disable all undercurls
