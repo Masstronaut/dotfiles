@@ -82,3 +82,12 @@ vim.keymap.set("n", "<leader>st", function()
   vim.cmd.wincmd("J")
   vim.api.nvim_win_set_height(0, 15)
 end)
+
+-- write a file without running hooks (ie formatter)
+-- useful for codeblocks that get autoformatted in markdown
+vim.keymap.set(
+  "n",
+  "<leader>fw",
+  "<cmd>noautocmd w<CR>",
+  { noremap = true, silent = true, desc = "File - Write without formatting" }
+)
