@@ -163,7 +163,6 @@ set_workspace_focused() {
     create_workspace $1
     local active_workspaces=$( list_active_workspaces )
     local reorder_workspace_items_command=$(order_workspace_items "$active_workspaces" )
-    echo "reorder command: $reorder_workspace_items_command" >> /tmp/sketchybar.log
     eval "$reorder_workspace_items_command"
   fi
   # show the focused workspace no matter what
