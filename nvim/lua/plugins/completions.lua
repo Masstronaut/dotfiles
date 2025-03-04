@@ -92,6 +92,8 @@ return {
         }),
         formatting = {
           format = require("tailwindcss-colorizer-cmp").formatter,
+          fields = { "kind", "abbr", "menu" },
+          expandable_indicator = true, -- draws a scroll bar
         },
       })
     end,
