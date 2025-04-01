@@ -39,6 +39,18 @@ done < <(echo "$aerospace_apps") # < <() is used to prevent subshell creation in
 # Load the color variables
 source $CONFIG_DIR/colors.sh
 
+# Get the system monitor ID of the specified workspace. 
+# Expects the workspace ID as the first argument
+# Returns the monitor ID of the workspace
+# returns nothing (empty string) if the workspace has no windows.
+get_workspace_monitor_id() {
+  local workspace_id="$1"
+  # aerospace command that returns all windows in the workspace, formatted as only the system monitor ID
+  # each workspace is 1 character long, so truncate the output to only the first character
+  local aerospace_result=$(aerospace list-windows --workspace $workspace_id --format "%{monitor-appkit-nsscreen-screens-id}")
+  local monitor_id=${aerospace_result:0:1}
+  echo $monitor_id
+}
 
 # create a workspace item.
 # Expects the workspace id as the first argument
@@ -51,9 +63,11 @@ create_workspace() {
     fi
 
     # Only render spaces in the top bar if they contain windows
-    # -n means "nonzero" length string - ie the space has at least 1 window 
     local drawing="off"
-    if [[ -n $(aerospace list-windows --workspace $sid) ]]; then
+    # this will return the monitor ID of the workspace, or an empty string if the workspace has no windows
+    local monitor_id=$(get_workspace_monitor_id $sid)
+    # -n means "nonzero" length string - ie the space has at least 1 window 
+    if [[ -n $monitor_id ]]; then
       drawing="on"
     fi
 
@@ -61,6 +75,7 @@ create_workspace() {
     sketchybar --add item workspace.$sid left \
         --set workspace.$sid \
         drawing="$drawing" \
+        display="$monitor_id" \
         background.color="$ITEM_BG_COLOR" \
         background.corner_radius=5 \
         background.height=22 \
@@ -188,3 +203,4 @@ set_workspace_unfocused() {
   fi
 
 }
+
