@@ -27,9 +27,9 @@ fi
 # Color the item based on available battery
 source $CONFIG_DIR/colors.sh
 
-if [ $(echo "$PERCENTAGE > 70" | bc) -eq 1 ]; then
+if [ $(echo "$PERCENTAGE > 50" | bc) -eq 1 ]; then
   COLOR="0xFF${PINE}"
-elif [ $(echo "$MEMORY_UTILIZATION_PERCENT > 30" | bc) -eq 1 ]; then
+elif [ $(echo "$PERCENTAGE > 20" | bc) -eq 1 ]; then
   COLOR="0xFF${GOLD}"
 else
   COLOR="0xFF${LOVE}"
