@@ -42,7 +42,7 @@ return {
 			})
 		end,
 		keys = {
-			{ "<leader>gp", "<cmd>Gitsigns preview_hunk<CR>", desc = "Git Preview hunk" },
+			{ "<leader>ghp", "<cmd>Gitsigns preview_hunk<CR>", desc = "Git Preview hunk" },
 			-- { "<leader>gb", "<cmd>Gitsigns toggle_current_line_blame<CR>", desc = "Git blame current line" },
 			-- { "<leader>gd", "<cmd>Gitsigns diffthis<cr>",                  desc = "Git Diff" },
 			{ "[c", "<cmd>Gitsigns prev_hunk<CR>", desc = "Git prev hunk" },
@@ -50,6 +50,10 @@ return {
 			{ "<leader>ghp", "<cmd>Gitsigns preview_hunk<CR>", desc = "Git preview hunk" },
 			{ "<leader>glb", "<cmd>Gitsigns blame_line<CR>", desc = "Git blame line" },
 			{ "<leader>glh", "<cmd>Gitsigns toggle_linehl<CR>", desc = "Git toggle line highlight" },
+			{ "<leader>ghr", "<cmd>Gitsigns reset_hunk<CR>", desc = "Git reset hunk" },
+			{ "<leader>ghs", "<cmd>Gitsigns stage_hunk<CR>", desc = "Git stage hunk" },
+			{ "<leader>ghu", "<cmd>Gitsigns undo_stage_hunk<CR>", desc = "Git undo stage hunk" },
+			{ "<leader>ghv", "<cmd>Gitsigns select_hunk<CR>", desc = "Git select hunk" },
 		},
 	},
 }
