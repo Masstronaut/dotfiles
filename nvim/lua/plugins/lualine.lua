@@ -1,6 +1,7 @@
 return {
   "nvim-lualine/lualine.nvim",
   config = function()
+    local rose_pine = require("rose-pine.palette")
     require("lualine").setup({
       options = {
         theme = "rose-pine",
@@ -18,8 +19,8 @@ return {
               local colors = require("lualine.themes." .. vim.g.colors_name)
 
               return {
-                fg = vim.bo.modified and colors.insert.a.fg or colors.inactive.c.fg,
-                bg = vim.bo.modified and colors.insert.a.bg or colors.inactive.c.bg,
+                fg = vim.bo.modified and rose_pine.love or rose_pine.text,
+                bg = vim.bo.modified and rose_pine.rose or rose_pine.highlight_high,
                 gui = vim.bo.modified and "bold" or "NONE",
               }
             end,

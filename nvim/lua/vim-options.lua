@@ -14,7 +14,7 @@ vim.o.conceallevel = 2 -- Hide concealable text
 vim.opt.scrolloff = 6 -- Keep 6 lines above/below cursor
 vim.o.splitbelow = true -- Split windows below current window
 vim.o.splitright = true -- Split windows right of the current window
-vim.o.winborder = 'rounded' -- Set window border style to rounded for floating windows
+vim.o.winborder = "rounded" -- Set window border style to rounded for floating windows
 
 -- manually re-write the status line values so that:
 -- 1. the current line number is inline with the relative line numbers
@@ -52,10 +52,6 @@ vim.api.nvim_create_autocmd("TermOpen", {
 		vim.opt.number = false
 		vim.opt.relativenumber = false
 	end,
-})
-
-vim.diagnostic.config({
-	virtual_lines = true,
 })
 
 require("vim-keybinds")
