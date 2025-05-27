@@ -13,7 +13,11 @@ after-login-command = []
 # Run Sketchybar together with AeroSpace
 # sketchybar has a built-in detection of already running process,
 # so it won't be run twice on AeroSpace restart
-after-startup-command = ['exec-and-forget sketchybar']
+# Run a reload first, so that we don't launch it, startup sketchybar, then immediately reload it
+# Reload is so that if sketchybar is already running it reloads the aerospace workspace info
+# if sketchybar ISN'T running, --reload does nothing
+# run sketchybar second, so that if it WASN'T running, it gets launched.
+after-startup-command = ['exec-and-forget sketchybar --reload', 'exec-and-forget sketchybar']
 
 # Start AeroSpace at login
 start-at-login = true
@@ -62,6 +66,34 @@ preset = 'qwerty'
 [[on-window-detected]]
 if.app-name-regex-substring = 'finder'
 run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = "company.thebrowser.Browser"
+run = ['move-node-to-workspace B']
+
+[[on-window-detected]]
+if.app-id = "com.tinyspeck.slackmacgap"
+run = ['move-node-to-workspace I']
+
+[[on-window-detected]]
+if.app-id = "com.hnc.Discord"
+run = ['move-node-to-workspace M']
+
+[[on-window-detected]]
+if.app-id = "com.apple.MobileSMS"
+run = ['move-node-to-workspace M']
+
+[[on-window-detected]]
+if.app-id = "md.obsidian"
+run = ['move-node-to-workspace N']
+
+[[on-window-detected]]
+if.app-id = "com.apple.MobileSMS"
+run = ['move-node-to-workspace S']
+
+[[on-window-detected]]
+if.app-id = "com.github.wez.wezterm"
+run = ['move-node-to-workspace T']
 
 # Gaps between windows (inner-*) and between monitor edges (outer-*).
 # Possible values:
