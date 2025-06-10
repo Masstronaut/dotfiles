@@ -7,14 +7,16 @@ vim.keymap.set("n", "<leader>tt", "<cmd>tabnext<CR>", { noremap = true, silent =
 vim.keymap.set("n", "<leader>tT", "<cmd>tabNext<CR>", { noremap = true, silent = true, desc = "Previous tab" })
 
 -- Pane management keybinds that are a little easier to use.
-vim.keymap.set("n", "<leader>wh", "<cmd>wincmd h<CR>", { noremap = true, silent = true, desc = "Focus left pane" })
-vim.keymap.set("n", "<leader>wj", "<cmd>wincmd j<CR>", { noremap = true, silent = true, desc = "Focus lower pane" })
-vim.keymap.set("n", "<leader>wk", "<cmd>wincmd k<CR>", { noremap = true, silent = true, desc = "Focus upper pane" })
-vim.keymap.set("n", "<leader>wl", "<cmd>wincmd l<CR>", { noremap = true, silent = true, desc = "Focus right pane" })
-vim.keymap.set("n", "<leader>wH", "<cmd>wincmd H<CR>", { noremap = true, silent = true, desc = "Move pane left" })
-vim.keymap.set("n", "<leader>wJ", "<cmd>wincmd J<CR>", { noremap = true, silent = true, desc = "Move pane down" })
-vim.keymap.set("n", "<leader>wK", "<cmd>wincmd K<CR>", { noremap = true, silent = true, desc = "Move pane up" })
-vim.keymap.set("n", "<leader>wL", "<cmd>wincmd L<CR>", { noremap = true, silent = true, desc = "Move pane right" })
+vim.keymap.set("n", "<C-h>", "<cmd>wincmd h<CR>", { noremap = true, silent = true, desc = "Focus left pane" })
+vim.keymap.set("n", "<C-j>", "<cmd>wincmd j<CR>", { noremap = true, silent = true, desc = "Focus lower pane" })
+vim.keymap.set("n", "<C-k>", "<cmd>wincmd k<CR>", { noremap = true, silent = true, desc = "Focus upper pane" })
+vim.keymap.set("n", "<C-l>", "<cmd>wincmd l<CR>", { noremap = true, silent = true, desc = "Focus right pane" })
+--[[ can't differentiate between C-H and C-h, so trying without pane movements for a bit. They don't play well with edgy anyway.
+vim.keymap.set("n", "<C-H>", "<cmd>wincmd H<CR>", { noremap = true, silent = true, desc = "Move pane left" })
+vim.keymap.set("n", "<C-J>", "<cmd>wincmd J<CR>", { noremap = true, silent = true, desc = "Move pane down" })
+vim.keymap.set("n", "<C-K>", "<cmd>wincmd K<CR>", { noremap = true, silent = true, desc = "Move pane up" })
+vim.keymap.set("n", "<C-L>", "<cmd>wincmd L<CR>", { noremap = true, silent = true, desc = "Move pane right" })
+--]]
 
 -- gets the current [count] for a motion. If the count is 0 (not set) it will default to the minimum provided value.
 --@param min number
