@@ -30,7 +30,7 @@ done < <(echo "$aerospace_apps") # < <() is used to prevent subshell creation in
   while read -r app; do
     icon_strip+="$($CONFIG_DIR/plugins/icon_map_fn.sh "$app") "
   done <<< "${apps}"
-  icon_strip=$(echo "$icon_strip" | tr -d '\n')
+  icon_strip=${icon_strip//$'\n'/}
   echo "$icon_strip"
   return
 } 
