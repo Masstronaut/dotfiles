@@ -8,29 +8,18 @@ workspace_app_icons() {
   fi  
   local workspaceID="$1"
 
-  local aerospace_apps=$(aerospace list-windows --workspace $workspaceID)
+  local aerospace_apps=$(aerospace list-windows --workspace $workspaceID --format "%{app-name}")
 
   if [[ -z "$aerospace_apps" ]]; then
     echo " —"
     return
   fi
 
-  # iterate over all the workspace's windows and extract the names
-  local apps=""
-  while read -r line; do
-    local app_name=$(echo "$line" | awk -F '|' '{gsub(/^ +| +$/, "", $2); print $2}')
-    apps+="$app_name\n"
-done < <(echo "$aerospace_apps") # < <() is used to prevent subshell creation in zsh
-# using a subshell would cause the variable to be lost
-  
-  # replace occurrences of `\n` with newlines
-  apps=$(printf "%b" "$apps")
-
+  # Generate icon strip directly from app names (no parsing needed!)
   icon_strip=""
   while read -r app; do
-    icon_strip+="$($CONFIG_DIR/plugins/icon_map_fn.sh "$app") "
-  done <<< "${apps}"
-  icon_strip=${icon_strip//$'\n'/}
+    [[ -n "$app" ]] && icon_strip+="$($CONFIG_DIR/plugins/icon_map_fn.sh "$app") "
+  done <<< "$aerospace_apps"
   echo "$icon_strip"
   return
 } 
