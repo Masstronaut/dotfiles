@@ -32,6 +32,7 @@ return {
 	{
 		"nvim-telescope/telescope-ui-select.nvim",
 		config = function()
+			local pickers = require("telescope-live-grep-filters")
 			require("telescope").setup({
 				defaults = {
 					file_ignore_patterns = {
@@ -53,6 +54,14 @@ return {
 				pickers = {
 					find_files = {
 						hidden = true,
+					},
+					live_grep = {
+						mappings = {
+							i = {
+								["<C-e>"] = pickers.actions.set_extension,
+								["<C-f>"] = pickers.actions.set_folders,
+							},
+						},
 					},
 				},
 			})

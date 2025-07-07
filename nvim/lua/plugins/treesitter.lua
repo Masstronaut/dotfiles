@@ -4,6 +4,8 @@ return {
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
+    branch = "main",
+    lazy = false, -- Treesitter does not support lazy loading
     build = ":TSUpdate",
     config = function()
       -- Setup treesitter for indentation, highlighting, etc. for the languages I use

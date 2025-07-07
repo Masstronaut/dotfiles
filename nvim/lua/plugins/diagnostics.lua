@@ -6,15 +6,14 @@ return {
 	dependencies = { "rose-pine/neovim" },
 	config = function()
 		local rose_pine = require("rose-pine.palette")
+
 		require("tiny-inline-diagnostic").setup({
 			preset = "powerline",
-			background = string.upper(rose_pine.base),
-			mixing_color = rose_pine.base,
-			--[[ set colors
+			-- set colors
 			hi = {
-				error = rose_pine.rose,
+				background = vim.o.background == "dark" and string.upper(rose_pine.surface) or "",
+				mixing_color = rose_pine.surface,
 			},
-      --]]
 			options = {
 				show_source = {
 					enabled = true,
