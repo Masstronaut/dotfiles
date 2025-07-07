@@ -139,6 +139,12 @@ handle_workspace_change() {
   
   set_workspace_focused "$FOCUSED_WORKSPACE"
   set_workspace_unfocused "$PREV_WORKSPACE"
+  
+  # Check if the previous workspace has no windows and hide it if empty
+  # This handles the case where aerospace automatically switches workspaces when an app is quit
+  if [[ -n "$PREV_WORKSPACE" && -z "$(aerospace list-windows --workspace $PREV_WORKSPACE)" ]]; then
+    sketchybar --set workspace."$PREV_WORKSPACE" drawing=off label=" —"
+  fi
 }
 
 # Use this to detect if an item needs to be created
