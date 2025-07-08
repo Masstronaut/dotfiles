@@ -199,10 +199,7 @@ handle_workspace_change() {
   # Build focused workspace updates
   if [[ -n "$FOCUSED_WORKSPACE" ]]; then
     if ! sketchybar_item_exists "workspace.$FOCUSED_WORKSPACE"; then
-      create_workspace "$FOCUSED_WORKSPACE"
-      local active_workspaces=$( list_active_workspaces )
-      local reorder_workspace_items_command=$(order_workspace_items "$active_workspaces" )
-      eval "$reorder_workspace_items_command"
+      create_and_position_workspace "$FOCUSED_WORKSPACE"
     fi
     
     # Generate icon strip for focused workspace using batched approach
@@ -252,32 +249,49 @@ sketchybar_item_exists() {
   fi
 }
 
-# Generates a sketchybar --reorder command to correctly sort workspace items
+# Creates a workspace and positions it correctly in the bar
+# Use this when creating workspaces dynamically (not during initial setup)
+create_and_position_workspace() {
+  local workspace_id="$1"
+  create_workspace "$workspace_id"
+  position_workspace_item "$workspace_id"
+}
+
+# Moves a workspace item to the correct position relative to other workspace items
 # This should be used whenever a new workspace item is created after initialization
 # to ensure that the workspace items are sorted in the correct order
-order_workspace_items() {
-  # Read input from positional argument
-  local input=($(echo "$1" | tr ' ' '\n'))
-
-  # Process input: remove duplicates and sort
-  local sorted=($(printf "%s\n" "${input[@]}" | sort -u))
-
-  # Expand into sketchybar --reorder format
-  printf "sketchybar --reorder"
-  for item in "${sorted[@]}"; do
-    printf " \"workspace.%s\"" "$item"
+position_workspace_item() {
+  local new_workspace="$1"
+  
+  # First, move the new workspace before workspace_separator to ensure correct section
+  sketchybar --move "workspace.$new_workspace" before workspace_separator
+  
+  # Then find the correct position among other workspace items
+  local all_workspaces=$(aerospace list-windows --monitor all --format "%{workspace}" | sort -u)
+  local previous_workspace=""
+  
+  # Find the workspace that should come immediately before this one
+  for ws in $all_workspaces; do
+    if [[ "$ws" < "$new_workspace" ]] && sketchybar --query "workspace.$ws" &>/dev/null; then
+      previous_workspace="$ws"
+    elif [[ "$ws" > "$new_workspace" ]] && sketchybar --query "workspace.$ws" &>/dev/null; then
+      # Found the first workspace after our new one, so position before it
+      sketchybar --move "workspace.$new_workspace" before "workspace.$ws"
+      return
+    fi
   done
-  printf " workspace_separator front_app \n"
+  
+  # If we found a previous workspace, position after it
+  if [[ -n "$previous_workspace" ]]; then
+    sketchybar --move "workspace.$new_workspace" after "workspace.$previous_workspace"
+  fi
 }
 
 
 # Expects the workspace id as the first argument
 set_workspace_focused() {
   if ! sketchybar_item_exists "workspace.$1"; then
-    create_workspace $1
-    local active_workspaces=$( list_active_workspaces )
-    local reorder_workspace_items_command=$(order_workspace_items "$active_workspaces" )
-    eval "$reorder_workspace_items_command"
+    create_and_position_workspace $1
   fi
   # show the focused workspace no matter what
   sketchybar --set workspace."$1" drawing=on \
