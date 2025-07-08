@@ -46,16 +46,16 @@ get_workspace_monitor_id() {
   echo $monitor_id
 }
 
-# create a workspace item.
-# Expects the workspace id as the first argument
+# Generate sketchybar arguments for a workspace item (no execution)
+# Expects the workspace id as the first argument  
 # Optional second argument: item to position before (if not provided, no positioning)
-create_workspace() {
+# Returns the arguments as a space-separated string
+generate_workspace_args() {
     local sid=$1
     local position_before=$2
     
-    # if $1 was empty, log an error in /tmp/sketchybar.log
+    # if $1 was empty, return empty
     if [ -z "$sid" ]; then
-        echo "Error: create_workspace() expects a workspace id as the first argument" >> /tmp/sketchybar.log
         return
     fi
 
@@ -89,7 +89,7 @@ create_workspace() {
         icon="$sid"
         click_script="aerospace workspace $sid"
         label.font="sketchybar-app-font:Regular:16.0"
-        icon.font="Hack Nerd Font Mono:Regular:16.0"
+        "icon.font=Hack Nerd Font Mono:Regular:16.0"
         label.color="0xFF$MUTED"
         label.padding_left=6
         label.y_offset=-1
@@ -102,8 +102,26 @@ create_workspace() {
         sketchybar_args+=(--move workspace.$sid before "$position_before")
     fi
     
-    # Execute single sketchybar call
-    sketchybar "${sketchybar_args[@]}"
+    # Return arguments as newline-separated string
+    printf '%s\n' "${sketchybar_args[@]}"
+}
+
+# create a workspace item.
+# Expects the workspace id as the first argument
+# Optional second argument: item to position before (if not provided, no positioning)
+create_workspace() {
+    local sid=$1
+    local position_before=$2
+    
+    # if $1 was empty, log an error in /tmp/sketchybar.log
+    if [ -z "$sid" ]; then
+        echo "Error: create_workspace() expects a workspace id as the first argument" >> /tmp/sketchybar.log
+        return
+    fi
+
+    # Generate and execute args
+    local args=($(generate_workspace_args "$sid" "$position_before"))
+    sketchybar "${args[@]}"
 }
 sort_alphanumeric() {
   # Read input from positional argument
@@ -158,7 +176,7 @@ list_active_workspaces() {
   sort_alphanumeric "$window_workspaces" 
 }
 
-# Create sketchybar items for all active aerospace workspaces
+# Create sketchybar items for all active aerospace workspaces (batched)
 create_aerospace_workspaces() {
   # Get all data efficiently 
   local all_workspace_data=$(aerospace list-windows --monitor all --format "%{workspace}|%{app-name}")
@@ -168,15 +186,26 @@ create_aerospace_workspaces() {
   local active_workspaces=$(extract_unique_workspaces "$all_workspace_data")
   active_workspaces=$(include_focused_workspace "$active_workspaces" "$focused_workspace")
   
-  # Create workspace items for each active workspace
+  # Build all workspace creation arguments
+  local all_args=()
   for workspace_id in $active_workspaces; do
     if [[ -n "$workspace_id" ]]; then
-      create_workspace "$workspace_id"
-      if [[ "$workspace_id" == "$focused_workspace" ]]; then
-        set_workspace_focused "$workspace_id"
-      fi
+      # Read newline-separated args properly (preserves spaces)
+      while IFS= read -r arg; do
+        all_args+=("$arg")
+      done <<< "$(generate_workspace_args "$workspace_id")"
     fi
   done
+  
+  # Create all workspaces in single sketchybar call
+  if [[ ${#all_args[@]} -gt 0 ]]; then
+    sketchybar "${all_args[@]}"
+  fi
+  
+  # Set focused workspace styling (separate call needed for timing)
+  if [[ -n "$focused_workspace" ]]; then
+    set_workspace_focused "$focused_workspace"
+  fi
 }
 
 
