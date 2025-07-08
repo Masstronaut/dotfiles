@@ -48,8 +48,11 @@ get_workspace_monitor_id() {
 
 # create a workspace item.
 # Expects the workspace id as the first argument
+# Optional second argument: item to position before (if not provided, no positioning)
 create_workspace() {
     local sid=$1
+    local position_before=$2
+    
     # if $1 was empty, log an error in /tmp/sketchybar.log
     if [ -z "$sid" ]; then
         echo "Error: create_workspace() expects a workspace id as the first argument" >> /tmp/sketchybar.log
@@ -65,33 +68,42 @@ create_workspace() {
       drawing="on"
     fi
 
-    # Create the workspace item for the provided space ID
-    sketchybar --add item workspace.$sid left \
-        --set workspace.$sid \
-        drawing="$drawing" \
-        display="$monitor_id" \
-        background.color="$ITEM_BG_COLOR" \
-        background.corner_radius=5 \
-        background.height=22 \
-        background.border_color="0xFF$SUBTLE" \
-        background.border_width=1 \
-        icon.background.drawing=on \
-        icon.background.corner_radius=5 \
-        icon.background.color="0xFF$SUBTLE" \
-        icon.background.height=20 \
-        icon.padding_left=4 \
-        icon.padding_right=6 \
-        icon.color="$BAR_COLOR" \
-        icon="$sid" \
-        click_script="aerospace workspace $sid" \
-        label.font="sketchybar-app-font:Regular:16.0" \
-        icon.font="Hack Nerd Font Mono:Regular:16.0" \
-        label.color="0xFF$MUTED" \
-        label.padding_left=6 \
-        label.y_offset=-1 \
-        label="$(workspace_app_icons $sid)" \
+    # Build sketchybar command array
+    local sketchybar_args=(
+        --add item workspace.$sid left
+        --set workspace.$sid
+        drawing="$drawing"
+        display="$monitor_id"
+        background.color="$ITEM_BG_COLOR"
+        background.corner_radius=5
+        background.height=22
+        background.border_color="0xFF$SUBTLE"
+        background.border_width=1
+        icon.background.drawing=on
+        icon.background.corner_radius=5
+        icon.background.color="0xFF$SUBTLE"
+        icon.background.height=20
+        icon.padding_left=4
+        icon.padding_right=6
+        icon.color="$BAR_COLOR"
+        icon="$sid"
+        click_script="aerospace workspace $sid"
+        label.font="sketchybar-app-font:Regular:16.0"
+        icon.font="Hack Nerd Font Mono:Regular:16.0"
+        label.color="0xFF$MUTED"
+        label.padding_left=6
+        label.y_offset=-1
+        label="$(workspace_app_icons $sid)"
         script="$CONFIG_DIR/plugins/aerospace.sh $sid"
-
+    )
+    
+    # Add positioning if specified
+    if [[ -n "$position_before" ]]; then
+        sketchybar_args+=(--move workspace.$sid before "$position_before")
+    fi
+    
+    # Execute single sketchybar call
+    sketchybar "${sketchybar_args[@]}"
 }
 sort_alphanumeric() {
   # Read input from positional argument
@@ -249,12 +261,28 @@ sketchybar_item_exists() {
   fi
 }
 
+# Gets all existing workspace items from sketchybar efficiently
+get_existing_workspace_items() {
+  sketchybar --query bar | jq -r '.items[]?' | grep '^workspace\.' | sed 's/^workspace\.//'
+}
+
 # Creates a workspace and positions it correctly in the bar
 # Use this when creating workspaces dynamically (not during initial setup)
 create_and_position_workspace() {
   local workspace_id="$1"
-  create_workspace "$workspace_id"
-  position_workspace_item "$workspace_id"
+  local existing_workspaces=$(get_existing_workspace_items)
+  
+  # Find the correct position
+  local position_target="workspace_separator"
+  for ws in $existing_workspaces; do
+    if [[ "$ws" > "$workspace_id" ]]; then
+      position_target="workspace.$ws"
+      break
+    fi
+  done
+  
+  # Create workspace with positioning in single call
+  create_workspace "$workspace_id" "$position_target"
 }
 
 # Moves a workspace item to the correct position relative to other workspace items
