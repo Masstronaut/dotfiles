@@ -15,12 +15,17 @@ workspace_app_icons() {
     return
   fi
 
-  # Generate icon strip directly from app names (no parsing needed!)
-  icon_strip=""
+  # Generate icon strip using batched approach (eliminates subprocess overhead)
+  local app_array=()
   while read -r app; do
-    [[ -n "$app" ]] && icon_strip+="$($CONFIG_DIR/plugins/icon_map_fn.sh "$app") "
+    [[ -n "$app" ]] && app_array+=("$app")
   done <<< "$aerospace_apps"
-  echo "$icon_strip"
+  
+  if [[ ${#app_array[@]} -gt 0 ]]; then
+    echo "$($CONFIG_DIR/plugins/icon_map_fn_batched.sh "${app_array[@]}")"
+  else
+    echo ""
+  fi
   return
 } 
 
@@ -95,25 +100,69 @@ sort_alphanumeric() {
   # Process input: remove duplicates and sort
   printf "%s\n" "${input[@]}" | sort -u
 }
+# Extract unique workspace IDs from aerospace workspace data
+# Parameters:
+#   $1 - workspace_data: multi-line string in format "workspace_id|app_name"
+# Returns:
+#   Space-separated string of unique workspace IDs
+extract_unique_workspaces() {
+  local workspace_data="$1"
+  local workspaces_found=""
+  
+  while IFS='|' read -r workspace_id app_name; do
+    if [[ -n "$workspace_id" ]]; then
+      # Add workspace to list if not already present
+      if [[ "$workspaces_found" != *" $workspace_id "* ]]; then
+        workspaces_found+=" $workspace_id "
+      fi
+    fi
+  done <<< "$workspace_data"
+  
+  echo "$workspaces_found"
+}
+
+# Ensure focused workspace is included in workspace list (handles empty workspaces)
+# Parameters:
+#   $1 - workspace_list: space-separated string of workspace IDs
+#   $2 - focused_workspace: the currently focused workspace ID
+# Returns:
+#   Updated space-separated string of workspace IDs including focused workspace
+include_focused_workspace() {
+  local workspace_list="$1"
+  local focused_workspace="$2"
+  
+  # Add focused workspace if it has no windows (empty workspace)
+  if [[ "$workspace_list" != *" $focused_workspace "* ]]; then
+    workspace_list+=" $focused_workspace "
+  fi
+  
+  echo "$workspace_list"
+}
+
+# Legacy function for compatibility with existing code
 list_active_workspaces() {
   local window_workspaces=$(aerospace list-windows --monitor all --format %{workspace})
   window_workspaces="$window_workspaces"$'\n'"$(aerospace list-workspaces --focused)"
   sort_alphanumeric "$window_workspaces" 
 }
 
-# Create all of the workspace items
+# Create sketchybar items for all active aerospace workspaces
 create_aerospace_workspaces() {
+  # Get all data efficiently 
+  local all_workspace_data=$(aerospace list-windows --monitor all --format "%{workspace}|%{app-name}")
   local focused_workspace=$(aerospace list-workspaces --focused)
-  local active_workspaces=$( list_active_workspaces )
-
-  # lazy initialization of workspaces helps sketchybar startup times.
-  # Only create a workspace item once the workspace is focused or has a window in it
-  for sid in $active_workspaces; do
-    # log the execution time of the function in a log file
-    # { echo -n "creating workspace $sid. Timing: "; time create_workspace $sid; } 2>&1 | tee -a /tmp/sketchybar.log
-    create_workspace $sid
-    if [ $sid = $focused_workspace ]; then
-      set_workspace_focused $sid
+  
+  # Process the data to find active workspaces
+  local active_workspaces=$(extract_unique_workspaces "$all_workspace_data")
+  active_workspaces=$(include_focused_workspace "$active_workspaces" "$focused_workspace")
+  
+  # Create workspace items for each active workspace
+  for workspace_id in $active_workspaces; do
+    if [[ -n "$workspace_id" ]]; then
+      create_workspace "$workspace_id"
+      if [[ "$workspace_id" == "$focused_workspace" ]]; then
+        set_workspace_focused "$workspace_id"
+      fi
     fi
   done
 }
@@ -126,13 +175,68 @@ create_aerospace_workspaces() {
 # - PREV_WORKSPACE: The ID of the workspace that was previously focused
 handle_workspace_change() {
   
-  set_workspace_focused "$FOCUSED_WORKSPACE"
-  set_workspace_unfocused "$PREV_WORKSPACE"
+  # Get all workspace data in single call
+  local all_data=$(aerospace list-windows --monitor all --format "%{workspace}|%{app-name}")
   
-  # Check if the previous workspace has no windows and hide it if empty
-  # This handles the case where aerospace automatically switches workspaces when an app is quit
-  if [[ -n "$PREV_WORKSPACE" && -z "$(aerospace list-windows --workspace $PREV_WORKSPACE)" ]]; then
-    sketchybar --set workspace."$PREV_WORKSPACE" drawing=off label=" —"
+  local focused_apps=""
+  local prev_apps=""
+  local prev_empty="true"
+  
+  # Parse workspace data for both focused and previous workspaces
+  while IFS='|' read -r ws app; do
+    if [[ "$ws" == "$FOCUSED_WORKSPACE" && -n "$app" ]]; then
+      focused_apps+="$app "
+    elif [[ "$ws" == "$PREV_WORKSPACE" && -n "$app" ]]; then
+      prev_apps+="$app "
+      prev_empty="false"
+    fi
+  done <<< "$all_data"
+  
+  # Build workspace updates
+  local focused_updates=""
+  local prev_updates=""
+  
+  # Build focused workspace updates
+  if [[ -n "$FOCUSED_WORKSPACE" ]]; then
+    if ! sketchybar_item_exists "workspace.$FOCUSED_WORKSPACE"; then
+      create_workspace "$FOCUSED_WORKSPACE"
+      local active_workspaces=$( list_active_workspaces )
+      local reorder_workspace_items_command=$(order_workspace_items "$active_workspaces" )
+      eval "$reorder_workspace_items_command"
+    fi
+    
+    # Generate icon strip for focused workspace using batched approach
+    local focused_icons=""
+    if [[ -n "$focused_apps" ]]; then
+      local focused_app_array=($focused_apps)
+      focused_icons="$($CONFIG_DIR/plugins/icon_map_fn_batched.sh "${focused_app_array[@]}")"
+    else
+      focused_icons=" —"
+    fi
+    
+    focused_updates="--set workspace.$FOCUSED_WORKSPACE drawing=on label.color=$ACCENT_COLOR icon.background.color=$ACCENT_COLOR background.border_color=$ACCENT_COLOR label=\"$focused_icons\""
+  fi
+  
+  # Build previous workspace updates
+  if [[ -n "$PREV_WORKSPACE" ]]; then
+    local prev_icons=""
+    if [[ "$prev_empty" == "true" ]]; then
+      prev_icons=" —"
+      prev_updates="--set workspace.$PREV_WORKSPACE background.color=\"$ITEM_BG_COLOR\" label.color=0xFF$MUTED icon.background.color=\"0xFF$SUBTLE\" background.border_color=\"0xFF$SUBTLE\" drawing=off label=\"$prev_icons\""
+    else
+      local prev_app_array=($prev_apps)
+      prev_icons="$($CONFIG_DIR/plugins/icon_map_fn_batched.sh "${prev_app_array[@]}")"
+      prev_updates="--set workspace.$PREV_WORKSPACE background.color=\"$ITEM_BG_COLOR\" label.color=0xFF$MUTED icon.background.color=\"0xFF$SUBTLE\" background.border_color=\"0xFF$SUBTLE\" label=\"$prev_icons\""
+    fi
+  fi
+  
+  # Execute batched command
+  if [[ -n "$focused_updates" && -n "$prev_updates" ]]; then
+    eval "sketchybar $focused_updates $prev_updates"
+  elif [[ -n "$focused_updates" ]]; then
+    eval "sketchybar $focused_updates"
+  elif [[ -n "$prev_updates" ]]; then
+    eval "sketchybar $prev_updates"
   fi
 }
 

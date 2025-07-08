@@ -666,6 +666,9 @@ function __icon_map() {
     esac
 }
 ### END-OF-ICON-MAP
-__icon_map "$1"
-
-echo "$icon_result"
+# Process all arguments in batch (eliminates subprocess overhead)
+for app_name in "$@"; do
+    __icon_map "$app_name"
+    echo -n "$icon_result "
+done
+echo  # Final newline

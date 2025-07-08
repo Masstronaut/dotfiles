@@ -6,10 +6,15 @@ if [ "$SENDER" = "space_windows_change" ]; then
 
   icon_strip=" "
   if [ "${apps}" != "" ]; then
-    while read -r app
-    do
-      icon_strip+="$($CONFIG_DIR/plugins/icon_map_fn.sh "$app")"
+    # Convert apps to array for batched processing
+    app_array=()
+    while read -r app; do
+      [[ -n "$app" ]] && app_array+=("$app")
     done <<< "${apps}"
+    
+    if [[ ${#app_array[@]} -gt 0 ]]; then
+      icon_strip="$($CONFIG_DIR/plugins/icon_map_fn_batched.sh "${app_array[@]}")"
+    fi
   else
     icon_strip=" —"
   fi
