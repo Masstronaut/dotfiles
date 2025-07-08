@@ -2,11 +2,6 @@
 
 source "$CONFIG_DIR/colors.sh" # Loads all defined colors
 
-# This is a demo config to showcase some of the most important commands.
-# It is meant to be changed and configured, as it is intentionally kept sparse.
-# For a (much) more advanced configuration example see my dotfiles:
-# https://github.com/FelixKratz/dotfiles
-
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 ITEM_DIR="$CONFIG_DIR/items"
 
@@ -17,15 +12,18 @@ ITEM_DIR="$CONFIG_DIR/items"
 # If you are looking for other colors, see the color picker:
 # https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
 
-sketchybar --bar height=28        \
-                 blur_radius=30   \
-                 position=top     \
-                 sticky=off       \
-                 padding_left=10  \
-                 padding_right=10 \
-                 color=$BAR_COLOR \
-                 topmost=window
 
+bar_config=(
+  --bar
+  height=28
+  blur_radius=30
+  position=top
+  sticky=off
+  padding_left=10
+  padding_right=10
+  color="$BAR_COLOR"
+  topmost=window
+)
 
 ##### Changing Defaults #####
 # We now change some default values, which are applied to all further items.
@@ -33,6 +31,7 @@ sketchybar --bar height=28        \
 # https://felixkratz.github.io/SketchyBar/config/items
 
 default=(
+  --default
   padding_left=5
   padding_right=5
   icon.font="SF Pro Nerd Font:Semibold:14.0"
@@ -47,24 +46,35 @@ default=(
   label.padding_left=4
   label.padding_right=10
 )
-sketchybar --default "${default[@]}"
+
+sketchybar "${bar_config[@]}" "${default[@]}"
 
 
 
-# -- Left Side Items --
-source $ITEM_DIR/aerospaces.sh
-source $ITEM_DIR/front_app.sh
+# -- Parallel Initialization --
+# Create left and right sides in parallel for faster startup
 
-# -- Center Items --
+# Left side (workspaces + front_app) in background
+$CONFIG_DIR/batch_init.sh left &
+left_pid=$!
+
+# Right side (cpu, memory, battery, etc.) in background  
+$CONFIG_DIR/batch_init.sh right &
+right_pid=$!
+
+# Center items (can run immediately)
 source $ITEM_DIR/media.sh
+render_bar_item_media
 
-# --- Right side items ---
-source $ITEM_DIR/calendar.sh
-source $ITEM_DIR/volume.sh
-source $ITEM_DIR/battery.sh
-source $ITEM_DIR/cpu.sh
-source $ITEM_DIR/memory.sh
-source $ITEM_DIR/wifi.sh
+# Wait for both sides to complete
+wait $left_pid $right_pid
+
+# Set focused workspace styling after all items are created
+source $CONFIG_DIR/utils/aerospace.sh
+FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
+if [[ -n "$FOCUSED_WORKSPACE" ]]; then
+    set_workspace_focused "$FOCUSED_WORKSPACE"
+fi
 
 # -- Handle theme changes --
 sketchybar --add event theme_change AppleInterfaceThemeChangedNotification 

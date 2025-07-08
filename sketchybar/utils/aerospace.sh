@@ -85,7 +85,7 @@ generate_workspace_args() {
         icon.background.height=20
         icon.padding_left=4
         icon.padding_right=6
-        icon.color="$BAR_COLOR"
+        icon.color="$ITEM_LABEL_COLOR"
         icon="$sid"
         click_script="aerospace workspace $sid"
         label.font="sketchybar-app-font:Regular:16.0"

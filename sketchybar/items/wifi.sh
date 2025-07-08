@@ -1,10 +1,11 @@
 #!/bin/bash
 
+# WiFi item configuration (using native Control Center alias)
+bar_item_wifi=(
+    --add alias "Control Center,WiFi" right
+)
 
-#sketchybar --add item wifi right \
-#           --set wifi script="$PLUGIN_DIR/wifi.sh" \
-#           --subscribe wifi wifi_change mouse.clicked \
-#           --set wifi update_freq=5
-
-# use the native wifi item
-sketchybar --add alias "Control Center,WiFi" right
+# Function to render WiFi item
+render_bar_item_wifi() {
+    sketchybar "${bar_item_wifi[@]}"
+}
