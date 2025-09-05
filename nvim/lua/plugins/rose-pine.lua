@@ -89,12 +89,16 @@ return {
 			set_dark_mode = function()
 				vim.api.nvim_set_option_value("background", "dark", {})
 				vim.cmd("colorscheme rose-pine-main")
-				vim.cmd("Lazy reload tiny-inline-diagnostic.nvim")
+				vim.schedule(function()
+					vim.cmd("silent Lazy reload tiny-inline-diagnostic.nvim")
+				end)
 			end,
 			set_light_mode = function()
 				vim.api.nvim_set_option_value("background", "light", {})
 				vim.cmd("colorscheme rose-pine-dawn")
-				vim.cmd("Lazy reload tiny-inline-diagnostic.nvim")
+				vim.schedule(function()
+					vim.cmd("silent Lazy reload tiny-inline-diagnostic.nvim")
+				end)
 			end,
 		},
 	},
