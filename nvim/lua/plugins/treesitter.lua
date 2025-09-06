@@ -31,8 +31,7 @@ return {
         "vimdoc",
       }
 
-      local ts = require("nvim-treesitter")
-      ts.install(parsers)
+      require'nvim-treesitter'.install(parsers)
 
       -- Enable treesitter features for specific filetypes
       vim.api.nvim_create_autocmd("FileType", {
