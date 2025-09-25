@@ -33,6 +33,37 @@ workspace_app_icons() {
 # Load the color variables
 source $CONFIG_DIR/colors.sh
 
+# Workspace theme arrays for centralized styling
+workspace_base_style=(
+    background.color="$ITEM_BG_COLOR"
+    background.corner_radius=5
+    background.height=22
+    background.border_width=1
+    icon.background.drawing=on
+    icon.background.corner_radius=5
+    icon.background.height=20
+    icon.padding_left=4
+    icon.padding_right=6
+    icon.color="0xffffffff"
+    label.font="sketchybar-app-font:Regular:16.0"
+    label.padding_left=6
+    label.y_offset=-1
+)
+
+workspace_active_style=(
+    label.color="$ACCENT_COLOR"
+    icon.background.color="$ACCENT_COLOR" 
+    background.border_color="$ACCENT_COLOR"
+)
+
+workspace_inactive_style=(
+    label.color="$INACTIVE_COLOR"
+    icon.background.color="$INACTIVE_COLOR"
+    background.border_color="$INACTIVE_COLOR"
+)
+
+# Note: Arrays are expanded directly in sketchybar calls to preserve proper quoting
+
 # Get the system monitor ID of the specified workspace. 
 # Expects the workspace ID as the first argument
 # Returns the monitor ID of the workspace
@@ -68,31 +99,16 @@ generate_workspace_args() {
       drawing="on"
     fi
 
-    # Build sketchybar command array
+    # Build sketchybar command array using theme arrays
     local sketchybar_args=(
         --add item workspace.$sid left
         --set workspace.$sid
         drawing="$drawing"
         display="$monitor_id"
-        background.color="$ITEM_BG_COLOR"
-        background.corner_radius=5
-        background.height=22
-        background.border_color="0xFF$SUBTLE"
-        background.border_width=1
-        icon.background.drawing=on
-        icon.background.corner_radius=5
-        icon.background.color="0xFF$SUBTLE"
-        icon.background.height=20
-        icon.padding_left=4
-        icon.padding_right=6
-        icon.color="$ITEM_LABEL_COLOR"
+        "${workspace_base_style[@]}"
+        "${workspace_inactive_style[@]}"
         icon="$sid"
         click_script="aerospace workspace $sid"
-        label.font="sketchybar-app-font:Regular:16.0"
-        "icon.font=Hack Nerd Font Mono:Regular:16.0"
-        label.color="0xFF$MUTED"
-        label.padding_left=6
-        label.y_offset=-1
         label="$(workspace_app_icons $sid)"
         script="$CONFIG_DIR/plugins/aerospace.sh $sid"
     )
@@ -134,11 +150,11 @@ sort_alphanumeric() {
 # Parameters:
 #   $1 - workspace_data: multi-line string in format "workspace_id|app_name"
 # Returns:
-#   Space-separated string of unique workspace IDs
+#   Space-separated string of unique workspace IDs in alphabetical order
 extract_unique_workspaces() {
   local workspace_data="$1"
   local workspaces_found=""
-  
+
   while IFS='|' read -r workspace_id app_name; do
     if [[ -n "$workspace_id" ]]; then
       # Add workspace to list if not already present
@@ -147,8 +163,11 @@ extract_unique_workspaces() {
       fi
     fi
   done <<< "$workspace_data"
-  
-  echo "$workspaces_found"
+
+  # Sort the workspaces alphabetically before returning
+  if [[ -n "$workspaces_found" ]]; then
+    sort_alphanumeric "$workspaces_found"
+  fi
 }
 
 # Ensure focused workspace is included in workspace list (handles empty workspaces)
@@ -252,7 +271,11 @@ handle_workspace_change() {
       focused_icons=" —"
     fi
     
-    focused_updates="--set workspace.$FOCUSED_WORKSPACE drawing=on label.color=$ACCENT_COLOR icon.background.color=$ACCENT_COLOR background.border_color=$ACCENT_COLOR label=\"$focused_icons\""
+    # Build focused workspace updates (only state-specific properties)
+    focused_updates="--set workspace.$FOCUSED_WORKSPACE \
+                           drawing=on \
+                           ${workspace_active_style[*]} \
+                           label=\"$focused_icons\""
   fi
   
   # Build previous workspace updates
@@ -260,11 +283,18 @@ handle_workspace_change() {
     local prev_icons=""
     if [[ "$prev_empty" == "true" ]]; then
       prev_icons=" —"
-      prev_updates="--set workspace.$PREV_WORKSPACE background.color=\"$ITEM_BG_COLOR\" label.color=0xFF$MUTED icon.background.color=\"0xFF$SUBTLE\" background.border_color=\"0xFF$SUBTLE\" drawing=off label=\"$prev_icons\""
+      # Build previous workspace updates (empty, only state-specific properties)
+      prev_updates="--set workspace.$PREV_WORKSPACE \
+                          ${workspace_inactive_style[*]} \
+                          drawing=off \
+                          label=\"$prev_icons\""
     else
       local prev_app_array=($prev_apps)
       prev_icons="$($CONFIG_DIR/plugins/icon_map_fn_batched.sh "${prev_app_array[@]}")"
-      prev_updates="--set workspace.$PREV_WORKSPACE background.color=\"$ITEM_BG_COLOR\" label.color=0xFF$MUTED icon.background.color=\"0xFF$SUBTLE\" background.border_color=\"0xFF$SUBTLE\" label=\"$prev_icons\""
+      # Build previous workspace updates (with apps, only state-specific properties)
+      prev_updates="--set workspace.$PREV_WORKSPACE \
+                          ${workspace_inactive_style[*]} \
+                          label=\"$prev_icons\""
     fi
   fi
   
@@ -292,7 +322,7 @@ sketchybar_item_exists() {
 
 # Gets all existing workspace items from sketchybar efficiently
 get_existing_workspace_items() {
-  sketchybar --query bar | jq -r '.items[]?' | grep '^workspace\.' | sed 's/^workspace\.//'
+  sketchybar --query bar | jq -r '.items[]?' | grep '^workspace\.' | sed 's/^workspace\.//' | sort
 }
 
 # Creates a workspace and positions it correctly in the bar
@@ -350,27 +380,9 @@ set_workspace_focused() {
   if ! sketchybar_item_exists "workspace.$1"; then
     create_and_position_workspace $1
   fi
-  # show the focused workspace no matter what
-  sketchybar --set workspace."$1" drawing=on \
-                         label.color=$ACCENT_COLOR \
-                         icon.background.color=$ACCENT_COLOR \
-                         background.border_color=$ACCENT_COLOR
-}
-
-# Expects the workspace id as the first argument
-set_workspace_unfocused() {
-  # First, set it to unfocused colors (very fast)
+  # show the focused workspace no matter what (only state-specific properties)
   sketchybar --set workspace."$1" \
-                         background.color="$ITEM_BG_COLOR" \
-                         label.color=0xFF$MUTED \
-                         icon.background.color="0xFF$SUBTLE" \
-                         background.border_color="0xFF$SUBTLE"
-
-  #Afterwards, hide it if it has no windows (slower perf)
-  # -z means "empty" - ie the workspace has no windows
-  if [[ -z "$(aerospace list-windows --workspace $1)" ]]; then
-    sketchybar --set workspace."$1" drawing=off
-  fi
-
+                   drawing=on \
+                   "${workspace_active_style[@]}"
 }
 
