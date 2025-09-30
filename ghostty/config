@@ -1,0 +1,4 @@
+theme = dark:Rose Pine,light:Rose Pine Dawn
+window-decoration = none
+
+keybind = shift+enter=text:\x1b\r
