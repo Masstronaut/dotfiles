@@ -12,11 +12,11 @@ CPU_PERCENT="$(echo "$CPU_SYS $CPU_USER" | awk '{printf "%.0f\n", ($1 + $2)*100}
 source $CONFIG_DIR/colors.sh
 
 if [ $(echo "$CPU_PERCENT > 90" | bc) -eq 1 ]; then
-  COLOR="0xFF${LOVE}"
+  COLOR="$ERROR_COLOR"
 elif [ $(echo "$CPU_PERCENT > 70" | bc) -eq 1 ]; then
-  COLOR="0xFF${GOLD}"
+  COLOR="$WARNING_COLOR"
 else
-  COLOR="0xFF${PINE}"
+  COLOR="$SUCCESS_COLOR"
 fi
 
 

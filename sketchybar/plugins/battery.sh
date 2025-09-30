@@ -28,11 +28,11 @@ fi
 source $CONFIG_DIR/colors.sh
 
 if [ $(echo "$PERCENTAGE > 50" | bc) -eq 1 ]; then
-  COLOR="0xFF${PINE}"
+  COLOR="$SUCCESS_COLOR"
 elif [ $(echo "$PERCENTAGE > 20" | bc) -eq 1 ]; then
-  COLOR="0xFF${GOLD}"
+  COLOR="$WARNING_COLOR"
 else
-  COLOR="0xFF${LOVE}"
+  COLOR="$ERROR_COLOR"
 fi
 
 

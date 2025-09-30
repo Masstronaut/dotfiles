@@ -18,11 +18,11 @@ FORMATTED_MEMORY=$(printf "%.0f%%" $MEMORY_UTILIZATION_PERCENT)
 source $CONFIG_DIR/colors.sh
 
 if [ $(echo "$MEMORY_UTILIZATION_PERCENT > 90" | bc) -eq 1 ]; then
-  COLOR="0xFF${LOVE}"
+  COLOR="$ERROR_COLOR"
 elif [ $(echo "$MEMORY_UTILIZATION_PERCENT > 80" | bc) -eq 1 ]; then
-  COLOR="0xFF${GOLD}"
+  COLOR="$WARNING_COLOR"
 else
-  COLOR="0xFF${PINE}"
+  COLOR="$SUCCESS_COLOR"
 fi
 
 
