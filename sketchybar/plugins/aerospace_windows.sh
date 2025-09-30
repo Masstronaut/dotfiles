@@ -12,7 +12,10 @@ if [[ "$SENDER" = "change-window-workspace" ]]; then
     
     # Build updates for focused workspace (already exists)
     if [[ "$FOCUSED_WORKSPACE" ]]; then
-      updates+="--set workspace.$FOCUSED_WORKSPACE drawing=on label=\"$(workspace_app_icons $FOCUSED_WORKSPACE)\" "
+      updates+="--set workspace.$FOCUSED_WORKSPACE \
+                     drawing=on \
+                     ${workspace_active_style[*]} \
+                     label=\"$(workspace_app_icons $FOCUSED_WORKSPACE)\" "
     fi
     
     # Build updates for target workspace (create if it doesn't exist)
@@ -21,7 +24,10 @@ if [[ "$SENDER" = "change-window-workspace" ]]; then
         create_and_position_workspace "$TARGET_WORKSPACE"
         target_created=true
       fi
-      updates+="--set workspace.$TARGET_WORKSPACE drawing=on label=\"$(workspace_app_icons $TARGET_WORKSPACE)\" "
+      updates+="--set workspace.$TARGET_WORKSPACE \
+                     drawing=on \
+                     ${workspace_inactive_style[*]} \
+                     label=\"$(workspace_app_icons $TARGET_WORKSPACE)\" "
     fi
     
     # Execute batched command
