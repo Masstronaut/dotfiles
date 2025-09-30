@@ -6,5 +6,6 @@ github-copilot
 htop
 karabiner/automatic_backups
 raycast
-
+tmux/plugins/*
+.claude/
 
