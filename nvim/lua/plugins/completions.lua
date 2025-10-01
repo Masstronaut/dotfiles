@@ -5,6 +5,16 @@ return {
   {
     -- run `:Copilot setup` after install to set it up
     "github/copilot.vim",
+    config = function()
+      -- Disable default Tab mapping
+      vim.g.copilot_no_tab_map = true
+      -- Map Ctrl+y to accept Copilot suggestion
+      vim.keymap.set("i", "<C-y>", 'copilot#Accept("")', {
+        expr = true,
+        replace_keycodes = false,
+        desc = "Accept Copilot suggestion",
+      })
+    end,
   },
   {
     -- expand snippets
