@@ -21,29 +21,29 @@ vim.keymap.set("n", "<C-L>", "<cmd>wincmd L<CR>", { noremap = true, silent = tru
 -- gets the current [count] for a motion. If the count is 0 (not set) it will default to the minimum provided value.
 --@param min number
 local min_count = function(min)
-  local count = vim.v.count
-  if count == 0 then
-    count = min
-  end
-  return count
+	local count = vim.v.count
+	if count == 0 then
+		count = min
+	end
+	return count
 end
 
 -- Set up pane resizing keybinds
 vim.keymap.set("n", "<leader>w+", function()
-  local count = min_count(2)
-  vim.cmd("resize +" .. count .. "<cr>")
+	local count = min_count(2)
+	vim.cmd("resize +" .. count .. "<cr>")
 end, { noremap = true, silent = true, desc = "Increase pane height" })
 vim.keymap.set("n", "<leader>w-", function()
-  local count = min_count(2)
-  vim.cmd("resize -" .. count .. "<cr>")
+	local count = min_count(2)
+	vim.cmd("resize -" .. count .. "<cr>")
 end, { noremap = true, silent = true, desc = "Decrease pane height" })
 vim.keymap.set("n", "<leader>w<", function()
-  local count = min_count(2)
-  vim.cmd("vertical resize +" .. count .. "<cr>")
+	local count = min_count(2)
+	vim.cmd("vertical resize +" .. count .. "<cr>")
 end, { noremap = true, silent = true, desc = "Decrease pane width" })
 vim.keymap.set("n", "<leader>w>", function()
-  local count = min_count(2)
-  vim.cmd("vertical resize -" .. count .. "<cr>")
+	local count = min_count(2)
+	vim.cmd("vertical resize -" .. count .. "<cr>")
 end, { noremap = true, silent = true, desc = "Increase pane width" })
 
 -- move lines up and down in insert and normal mode
@@ -52,44 +52,38 @@ vim.keymap.set("n", "<A-k>", "<cmd>m .-2<CR>", { noremap = true, silent = true, 
 vim.keymap.set("i", "<A-j>", "<cmd>m .+1<CR>", { noremap = true, silent = true, desc = "Move line down" })
 vim.keymap.set("i", "<A-k>", "<cmd>m .-2<CR>", { noremap = true, silent = true, desc = "Move line up" })
 
--- Indent / unindent lines using tab/shift-tab in normal mode
-vim.keymap.set("n", "<Tab>", ">>", { noremap = true, silent = true, desc = "Indent line" })
-vim.keymap.set("n", "<S-Tab>", "<<", { noremap = true, silent = true, desc = "Unindent line" })
--- tab normally navigates the jump list, so re-map ctrl-i to do it not via tab
-vim.keymap.set("n", "<C-i>", "<C-i>", { noremap = true, silent = true, desc = "Jump to next location" })
-
 -- source the current file (reload it) in neovim. Useful when updating nvim configs
 vim.keymap.set(
-  "n",
-  "<leader><leader>x",
-  "<cmd>source %<CR>",
-  { noremap = true, silent = true, desc = "Source current file" }
+	"n",
+	"<leader><leader>x",
+	"<cmd>source %<CR>",
+	{ noremap = true, silent = true, desc = "Source current file" }
 )
 
 -- highlight text when yanking
 --   try it with yap in normal mode to get an idea
 vim.api.nvim_create_autocmd("TextYankPost", {
-  desc = "Highlight text when yanking",
-  group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-  callback = function()
-    vim.highlight.on_yank()
-  end,
+	desc = "Highlight text when yanking",
+	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+	callback = function()
+		vim.highlight.on_yank()
+	end,
 })
 
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { noremap = true, silent = true, desc = "Exit terminal mode" })
 -- open a small terminal on the bottom of the screen with <leader>st
 vim.keymap.set("n", "<leader>st", function()
-  vim.cmd.vnew()
-  vim.cmd.term()
-  vim.cmd.wincmd("J")
-  vim.api.nvim_win_set_height(0, 15)
+	vim.cmd.vnew()
+	vim.cmd.term()
+	vim.cmd.wincmd("J")
+	vim.api.nvim_win_set_height(0, 15)
 end)
 
 -- write a file without running hooks (ie formatter)
 -- useful for codeblocks that get autoformatted in markdown
 vim.keymap.set(
-  "n",
-  "<leader>fw",
-  "<cmd>noautocmd w<CR>",
-  { noremap = true, silent = true, desc = "File - Write without formatting" }
+	"n",
+	"<leader>fw",
+	"<cmd>noautocmd w<CR>",
+	{ noremap = true, silent = true, desc = "File - Write without formatting" }
 )
