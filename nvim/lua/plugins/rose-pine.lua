@@ -59,8 +59,8 @@ return {
 					LineNr2 = { fg = "pine" },
 					LineNr1 = { fg = "foam" },
 					CursorLine = { bg = "surface" },
-					NotifyBackground = { bg = "surface" }, -- nvim-notify background
-					-- this highlight group is used by colorful-winsep.nvim to set a border color on active window
+					Cursor = { fg = "rose", bg = "rose" },
+					NotifyBackground = { bg = "surface" },
 					NvimSeparator = { fg = "rose" },
 					--[[ this generates an error in the rose-pine highlighter fn
         LineNrCurr = { fg = "#BDEEF9", style = { "bold" } },
@@ -80,6 +80,8 @@ return {
 				end,
 			})
 			vim.cmd("colorscheme rose-pine")
+			-- Set the cursor to use the Cursor highlight group
+			vim.opt.guicursor = "n-v-c:block-Cursor,i-ci-ve:ver25-Cursor,r-cr-o:hor20-Cursor"
 		end,
 	},
 	{
