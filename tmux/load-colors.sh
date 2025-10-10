@@ -3,9 +3,6 @@
 # Source the rose-pine theme
 source ~/.config/themes/rose-pine.sh
 
-# Debug output
-echo "Setting PINE to: #$PINE" >> /tmp/tmux-colors.log
-
 # Set tmux options with # prefix for colors
 tmux set-option -g @base "#$BASE"
 tmux set-option -g @surface "#$SURFACE"
