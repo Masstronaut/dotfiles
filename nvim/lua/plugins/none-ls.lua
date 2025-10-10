@@ -1,11 +1,17 @@
-local function config_exists(config_file_names)
-  for _, config_file_name in ipairs(config_file_names) do
-    if vim.fn.filereadable(vim.fn.getcwd() .. "/" .. config_file_name) == 1 then
-      return true
-    end
-  end
-  return false
+local function config_exists(config_file_names, path)
+  -- Use the buffer's directory, fallback to cwd
+  local search_dir = path and vim.fs.dirname(path) or vim.fn.getcwd()
+
+  -- Search upward from the file's directory
+  local found = vim.fs.find(config_file_names, {
+    path = search_dir,
+    upward = true,
+    type = "file",
+  })
+
+  return #found > 0
 end
+
 local eslint_config_files = {
   ".eslintrc.js",
   ".eslintrc.json",
@@ -17,17 +23,6 @@ local eslint_config_files = {
   "eslint.config.cjs",
   "eslint.config.ts",
 }
-local prettier_config_files = {
-  ".prettierrc",
-  ".prettierrc.json",
-  ".prettierrc.yaml",
-  ".prettierrc.yml",
-  ".prettierrc.js",
-  "prettier.config.js",
-  "prettier.config.cjs",
-  "prettier.config.mjs",
-  ".prettierrc.toml",
-}
 return {
   "nvimtools/none-ls.nvim",
   dependencies = {
@@ -36,21 +31,17 @@ return {
   },
   config = function()
     local null_ls = require("null-ls")
-    local conditional_sources = {}
-    if config_exists(prettier_config_files) then
-      table.insert(conditional_sources, null_ls.builtins.formatting.prettierd)
-    end
-    if config_exists(eslint_config_files) then
-      table.insert(conditional_sources, require("none-ls.diagnostics.eslint")) --[[ requires none-ls-extras.nvim ]]
-    end
     null_ls.setup({
+      debug = false,
       sources = {
-        null_ls.builtins.formatting.stylua,
-        null_ls.builtins.formatting.black,
-        null_ls.builtins.formatting.isort,
-        null_ls.builtins.formatting.shfmt,
-        -- expand the conditional_sources table
-        unpack(conditional_sources),
+        -- Conditional formatters based on config file presence
+        require("none-ls.diagnostics.eslint_d").with({
+          condition = function(utils)
+            local bufname = utils.bufname or utils.filename or vim.api.nvim_buf_get_name(0)
+            local result = config_exists(eslint_config_files, bufname)
+            return result
+          end,
+        }),
       },
     })
   end,
