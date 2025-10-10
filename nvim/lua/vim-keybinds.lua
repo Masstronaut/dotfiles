@@ -66,7 +66,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight text when yanking",
 	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
 	callback = function()
-		vim.highlight.on_yank()
+		vim.hl.on_yank()
 	end,
 })
 
@@ -87,3 +87,7 @@ vim.keymap.set(
 	"<cmd>noautocmd w<CR>",
 	{ noremap = true, silent = true, desc = "File - Write without formatting" }
 )
+
+vim.keymap.set("n", "<leader>nd", function()
+	require("notify").dismiss({ silent = true, pending = true })
+end, { noremap = true, silent = true, desc = "Dismiss all notifications" })
