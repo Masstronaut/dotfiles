@@ -13,11 +13,18 @@ source $CONFIG_DIR/colors.sh
 
 if [ $(echo "$CPU_PERCENT > 90" | bc) -eq 1 ]; then
   COLOR="$ERROR_COLOR"
+  ICON_COLOR="$ICON_TEXT_COLOR"
 elif [ $(echo "$CPU_PERCENT > 70" | bc) -eq 1 ]; then
   COLOR="$WARNING_COLOR"
+  ICON_COLOR="$ICON_TEXT_COLOR"
 else
   COLOR="$SUCCESS_COLOR"
+  ICON_COLOR="$ICON_TEXT_COLOR"
 fi
 
 
-sketchybar --set $NAME label="$CPU_PERCENT%" label.color="$COLOR" icon.color="$COLOR"
+CPU_DECIMAL=$(echo "$CPU_PERCENT / 100" | bc -l)
+
+sketchybar --set $NAME label="" icon.color="$ICON_COLOR" icon.background.color="$COLOR" background.border_color="$COLOR" \
+           --push $NAME "$CPU_DECIMAL" \
+           --set $NAME graph.color="$COLOR" graph.fill_color="$COLOR"

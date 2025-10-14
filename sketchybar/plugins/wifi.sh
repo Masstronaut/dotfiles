@@ -1,34 +1,32 @@
 #!/bin/bash
 
-# Identify the wifi interface device
-WIFI_INTERFACE=$(networksetup -listallhardwareports | awk '/Wi-Fi/{getline; print $NF}')
-
-# Get the wifi name
-WIFI_NAME=$(NEtworksetup -getairportnetwork $WIFI_INTERFACE | awk -F ": " '{print $2}')
-
-# Wifi state can be "On" or "Off"
+WIFI_INTERFACE=$(networksetup -listallhardwareports | awk '/Wi-Fi|AirPort/{getline; print $NF}')
+WIFI_NAME=$(networksetup -listpreferredwirelessnetworks "$WIFI_INTERFACE" | sed -n '2s/^\t//p')
 CURRENT_STATE=$(networksetup -getairportpower $WIFI_INTERFACE | awk '{print $4}')
 
-source ~/.config/sketchybar/colors.sh
+source $CONFIG_DIR/colors.sh
+
 update_wifi() {
   if [[ $CURRENT_STATE = "Off" ]]; then
-    ICON="􀙈" # sf symbols wifi.slash icon
-    LABEL=""
-    # 0 is interpreted by sketchybar as "use the default"
-    ICON_COLOR=$TEXT_COLOR
+    ICON="􀙈"
+    LABEL="Disabled"
+    COLOR=$ERROR_COLOR
+    ICON_COLOR="0xffffffff"
   else
-    ICON="􀙇" # sf symbols wifi icon
     if [[ -n $WIFI_NAME ]]; then
+      ICON="􀙇"
       LABEL="$WIFI_NAME"
-      ICON_COLOR=$TEXT_COLOR
+      COLOR=$SUCCESS_COLOR
+      ICON_COLOR="$ICON_TEXT_COLOR"
     else
-      LABEL=""
-      # Fade the icon a bit if wifi is on but not connected 
-      ICON_COLOR=0xA0$TEXT
+      ICON="􀙥"
+      LABEL="Disconnected"
+      COLOR=$WARNING_COLOR
+      ICON_COLOR="$ICON_TEXT_COLOR"
     fi
   fi
 
-  sketchybar --set $NAME icon="$ICON" label="$LABEL" icon.color=$ICON_COLOR
+  sketchybar --set $NAME icon="$ICON" label="$LABEL" icon.color="$ICON_COLOR" icon.background.color="$COLOR" background.border_color="$COLOR" label.color="$COLOR"
 }
 
 toggle_wifi() {
