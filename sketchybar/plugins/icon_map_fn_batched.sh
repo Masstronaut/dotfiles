@@ -416,7 +416,7 @@ function __icon_map() {
         ;;
    "ChatGPT")
         icon_result=":openai:"
-        ;;
+		;;
    "OpenVPN Connect")
         icon_result=":openvpn_connect:"
         ;;
@@ -563,6 +563,9 @@ function __icon_map() {
         ;;
    "Terminal" | "终端")
         icon_result=":terminal:"
+        ;;
+   "Ghostty")
+        icon_result=":ghostty:"
         ;;
    "Typora")
         icon_result=":text:"
