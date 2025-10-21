@@ -3,7 +3,7 @@
 source ~/.config/themes/rose-pine.sh
 
 export BAR_COLOR="0x50$BASE"     # base
-export ITEM_BG_COLOR="0x50$SURFACE" # surface
+export ITEM_BG_COLOR="0x60$SURFACE" # surface
 export ACCENT_COLOR="0xff$GOLD"  # gold
 export TEXT_COLOR="0xff$TEXT"    # text
 export ITEM_LABEL_COLOR="0xff$IRIS"
