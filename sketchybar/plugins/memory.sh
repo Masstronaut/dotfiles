@@ -1,8 +1,17 @@
 #!/bin/bash
 
 # Calculate the current memory usage in GB and print it to one decimal place
+# Includes active, wired, and compressed pages (matches macOS Activity Monitor)
 pagesize=$(pagesize)
-USED_MEMORY=$(vm_stat | awk -v ps=$pagesize '/Pages active/ {printf "%.1f\n", $3 * ps /1024/1024/1024}')
+USED_MEMORY=$(vm_stat | awk -v ps=$pagesize '
+  /Pages active/ { active = $3 }
+  /Pages wired down/ { wired = $4 }
+  /Pages occupied by compressor/ { compressed = $5 }
+  END {
+    total_pages = active + wired + compressed
+    printf "%.1f\n", total_pages * ps / 1024 / 1024 / 1024
+  }
+')
 
 # Calculate the total memory in GB
 TOTAL_MEMORY=$(sysctl hw.memsize | awk '{print $2/1024/1024/1024}')
