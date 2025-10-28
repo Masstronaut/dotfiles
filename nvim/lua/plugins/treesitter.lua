@@ -15,6 +15,7 @@ return {
 				"markdown",
 				"javascript",
 				"typescript",
+				"prisma",
 				"python",
 				"rust",
 				"go",
