@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This is for the native macOS spaces
+
 SPACE_SIDS=(1 2 3 4 5 6 7 8 9 10)
 
 for sid in "${SPACE_SIDS[@]}"

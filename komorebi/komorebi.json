@@ -1,0 +1,268 @@
+{
+	"$schema": "https://komorebi-for-mac.lgug2z.com/komorebi.0.1.0.schema.json",
+	"app_specific_configuration_path": "$HOME/.config/komorebi/applications.json",
+	"cross_monitor_move_behaviour": "Insert",
+	"default_workspace_padding": 4,
+	"default_container_padding": 4,
+	"border": true,
+	"theme": {
+		"palette": "Base16",
+		"name": "RosePineDawn"
+	},
+	"border_width": 4,
+	"border_offset": -3,
+	"border_radius": 16,
+	"floating_window_aspect_ratio": "Widescreen",
+	"floating_layer_behaviour": "Float",
+	"float_override_placement": "Center",
+	"resize_delta": 100,
+	"ignore_rules": [],
+	"global_work_area_offset": {
+		"top": 26,
+		"right": 0,
+		"bottom": 24,
+		"left": 0
+	},
+	"floating_applications": [
+		{
+			"matching_strategy": "Contains",
+			"id": "Settings",
+			"kind": "Title"
+		},
+		{
+			"matching_strategy": "Contains",
+			"id": "System Preferences",
+			"kind": "Title"
+		},
+		{
+			"matching_strategy": "Contains",
+			"id": "tailscale",
+			"kind": "Title"
+		},
+		{
+			"id": "coreautha",
+			"kind": "Exe",
+			"matching_strategy": "Equals"
+		}
+	],
+	"manage_rules": [],
+	"monitors": [
+		{
+			"workspaces": [
+				{
+					"name": "1",
+					"layout": "BSP"
+				},
+				{
+					"name": "2",
+					"layout": "VerticalStack"
+				},
+				{
+					"name": "3",
+					"layout": "HorizontalStack",
+					"initial_workspace_rules": [
+						{
+							"kind": "Exe",
+							"id": "Bambu Studio",
+							"matching_strategy": "Equals"
+						}
+					]
+				},
+				{
+					"name": "4",
+					"layout": "UltrawideVerticalStack"
+				},
+				{
+					"name": "5",
+					"layout": "Rows"
+				},
+				{
+					"name": "6",
+					"layout": "Grid"
+				},
+				{
+					"name": "7",
+					"layout": "RightMainVerticalStack"
+				},
+				{
+					"name": "8",
+					"layout": "Scrolling"
+				},
+				{
+					"name": "9",
+					"layout": "BSP"
+				},
+				{
+					"name": "A",
+					"layout": "BSP",
+					"initial_workspace_rules": [
+						{
+							"kind": "Exe",
+							"id": "Asana",
+							"matching_strategy": "Equals"
+						}
+					]
+				},
+				{
+					"name": "B",
+					"layout": "BSP",
+					"initial_workspace_rules": [
+						{
+							"kind": "Exe",
+							"id": "Browser",
+							"matching_strategy": "Contains"
+						},
+						{
+							"kind": "Exe",
+							"id": "Google Chrome",
+							"matching_strategy": "Equals"
+						},
+						{
+							"kind": "Exe",
+							"id": "Arc",
+							"matching_strategy": "Contains"
+						}
+					]
+				},
+				{
+					"name": "C",
+					"layout": "BSP",
+					"initial_workspace_rules": [
+						{
+							"kind": "Exe",
+							"id": "Codex",
+							"matching_strategy": "Contains"
+						}
+					]
+				},
+				{
+					"name": "D",
+					"layout": "BSP"
+				},
+				{
+					"name": "E",
+					"layout": "BSP"
+				},
+				{
+					"name": "F",
+					"layout": "BSP"
+				},
+				{
+					"name": "G",
+					"layout": "BSP"
+				},
+				{
+					"name": "H",
+					"layout": "BSP"
+				},
+				{
+					"name": "I",
+					"layout": "BSP",
+					"initial_workspace_rules": [
+						{
+							"kind": "Exe",
+							"id": "Slack",
+							"matching_strategy": "Equals"
+						}
+					]
+				},
+				{
+					"name": "J",
+					"layout": "BSP"
+				},
+				{
+					"name": "K",
+					"layout": "BSP"
+				},
+				{
+					"name": "L",
+					"layout": "BSP"
+				},
+				{
+					"name": "M",
+					"layout": "BSP",
+					"initial_workspace_rules": [
+						{
+							"kind": "Exe",
+							"id": "Discord",
+							"matching_strategy": "Contains"
+						},
+						{
+							"kind": "Exe",
+							"id": "Messages",
+							"matching_strategy": "Contains"
+						}
+					]
+				},
+				{
+					"name": "N",
+					"layout": "BSP",
+					"initial_workspace_rules": [
+						{
+							"kind": "Exe",
+							"id": "Obsidian",
+							"matching_strategy": "Equals"
+						}
+					]
+				},
+				{
+					"name": "O",
+					"layout": "BSP"
+				},
+				{
+					"name": "P",
+					"layout": "BSP"
+				},
+				{
+					"name": "Q",
+					"layout": "BSP"
+				},
+				{
+					"name": "R",
+					"layout": "BSP"
+				},
+				{
+					"name": "S",
+					"layout": "BSP",
+					"initial_workspace_rules": [
+						{
+							"kind": "Exe",
+							"id": "Spotify",
+							"matching_strategy": "Equals"
+						}
+					]
+				},
+				{
+					"name": "T",
+					"layout": "BSP",
+					"initial_workspace_rules": [
+						{
+							"kind": "Title",
+							"id": "Ghostty",
+							"matching_strategy": "Equals"
+						}
+					]
+				},
+				{
+					"name": "U",
+					"layout": "BSP"
+				},
+				{
+					"name": "V",
+					"layout": "BSP"
+				},
+				{
+					"name": "W",
+					"layout": "BSP",
+					"initial_workspace_rules": [
+						{
+							"kind": "Exe",
+							"id": "Notion",
+							"matching_strategy": "Equals"
+						}
+					]
+				}
+			]
+		}
+	]
+}

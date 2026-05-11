@@ -1,0 +1,64 @@
+{
+  "focused": "T",
+  "spaces": [
+    {
+      "name": "1",
+      "windows": [
+        "Zen",
+        "Ghostty",
+        "Notes"
+      ],
+      "icons": ":zen_browser: :ghostty: :notes:"
+    },
+    {
+      "name": "3",
+      "windows": [
+        "Bambu Studio"
+      ],
+      "icons": ":bambu_studio:"
+    },
+    {
+      "name": "B",
+      "windows": [
+        "Arc"
+      ],
+      "icons": ":arc:"
+    },
+    {
+      "name": "C",
+      "windows": [
+        "Codex"
+      ],
+      "icons": ":codex:"
+    },
+    {
+      "name": "M",
+      "windows": [
+        "Messages",
+        "Discord"
+      ],
+      "icons": ":messages: :discord:"
+    },
+    {
+      "name": "N",
+      "windows": [
+        "Obsidian"
+      ],
+      "icons": ":obsidian:"
+    },
+    {
+      "name": "S",
+      "windows": [
+        "Spotify"
+      ],
+      "icons": ":spotify:"
+    },
+    {
+      "name": "T",
+      "windows": [
+        "Ghostty"
+      ],
+      "icons": ":ghostty:"
+    }
+  ]
+}

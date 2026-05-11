@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [[ -z "${WINDOW_MANAGER:-}" ]]; then
+  export WINDOW_MANAGER="komorebi"
+else
+  export WINDOW_MANAGER
+fi
+
 source "$CONFIG_DIR/colors.sh" # Loads all defined colors
 
 PLUGIN_DIR="$CONFIG_DIR/plugins"
@@ -70,11 +76,8 @@ render_bar_item_media
 wait $left_pid $right_pid
 
 # Set focused workspace styling after all items are created
-source $CONFIG_DIR/utils/aerospace.sh
-FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
-if [[ -n "$FOCUSED_WORKSPACE" ]]; then
-    set_workspace_focused "$FOCUSED_WORKSPACE"
-fi
+source "$CONFIG_DIR/utils/window_manager_utils.sh"
+refresh_space_focus_from_state
 
 # -- Handle theme changes --
 sketchybar --add event theme_change AppleInterfaceThemeChangedNotification 
@@ -83,4 +86,3 @@ source $ITEM_DIR/theme_change.sh
 
 # ##### Force all scripts to run the first time (never do this in a script) #####
 sketchybar --update
-

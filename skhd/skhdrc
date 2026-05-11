@@ -1,0 +1,119 @@
+# Focus windows
+rshift - h                 : komorebic focus left
+rshift - j                 : komorebic focus down
+rshift - k                 : komorebic focus up
+rshift - l                 : komorebic focus right
+lshift + rshift - 0x21      : komorebic cycle-focus previous # 0x21 is [
+lshift + rshift - 0x1E      : komorebic cycle-focus next # 0x1E is ]
+
+# Move windows
+lshift + rshift - h         : komorebic move left
+lshift + rshift - j         : komorebic move down
+lshift + rshift - k         : komorebic move up
+lshift + rshift - l         : komorebic move right
+lshift + rshift - return    : komorebic promote
+
+# Stack windows
+lshift + rshift - left       : komorebic stack left
+lshift + rshift - down       : komorebic stack down
+lshift + rshift - up         : komorebic stack up
+lshift + rshift - right      : komorebic stack right
+rshift - 0x29              : komorebic unstack # 0x29 is ;
+rshift - 0x21              : komorebic cycle-stack previous # 0x21 is [
+rshift - 0x1E              : komorebic cycle-stack next # 0x1E is ]
+
+# Workspace layer
+lshift + rshift - 0x29      : komorebic toggle-workspace-layer # 0x29 is ;
+
+# Resize
+rshift			- 0x18		: komorebic resize-axis horizontal increase # 0x18 is +
+rshift			- 0x1B		: komorebic resize-axis horizontal decrease # 0x1B is -
+lshift + rshift	- 0x18		: komorebic resize-axis vertical increase
+lshift + rshift	- 0x1B		: komorebic resize-axis vertical decrease
+
+# Manipulate windows
+rshift          - 0x2F		: komorebic manage # 0x2F is .
+rshift			- space		: komorebic toggle-float
+lshift + rshift	- space		: komorebic toggle-workspace-float-override
+lshift + rshift	- f			: komorebic toggle-monocle
+
+# Window manager options
+lshift + rshift	- r		: komorebic retile
+rshift			- p		: komorebic toggle-pause
+rshift			- 0		: komorebic toggle-window-container-behaviour
+
+# Layouts
+rshift			- x		: komorebic flip-layout horizontal
+rshift			- y		: komorebic flip-layout vertical
+lshift + rshift	- x		: komorebic session-float-rule
+
+# Workspaces
+rshift - 1                 : komorebic focus-named-workspace 1 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - 2                 : komorebic focus-named-workspace 2 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - 3                 : komorebic focus-named-workspace 3 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - 4                 : komorebic focus-named-workspace 4 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - 5                 : komorebic focus-named-workspace 5 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - 6                 : komorebic focus-named-workspace 6 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - 7                 : komorebic focus-named-workspace 7 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - 8                 : komorebic focus-named-workspace 8 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - 9                 : komorebic focus-named-workspace 9 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - a                 : komorebic focus-named-workspace A && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - b                 : komorebic focus-named-workspace B && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - c                 : komorebic focus-named-workspace C && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - d                 : komorebic focus-named-workspace D && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - e                 : komorebic focus-named-workspace E && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+# rshift - f                 : komorebic focus-named-workspace F && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - g                 : komorebic focus-named-workspace G && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+# rshift - h                 : komorebic focus-named-workspace H && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - i                 : komorebic focus-named-workspace I && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+# rshift - j                 : komorebic focus-named-workspace J && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+# rshift - k                 : komorebic focus-named-workspace K && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+# rshift - l                 : komorebic focus-named-workspace L && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - m                 : komorebic focus-named-workspace M && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - n                 : komorebic focus-named-workspace N && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - o                 : komorebic focus-named-workspace O && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - p                 : komorebic focus-named-workspace P && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - q                 : komorebic focus-named-workspace Q && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+# rshift - r                 : komorebic focus-named-workspace R && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - s                 : komorebic focus-named-workspace S && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - t                 : komorebic focus-named-workspace T && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - u                 : komorebic focus-named-workspace U && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - v                 : komorebic focus-named-workspace V && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+rshift - w                 : komorebic focus-named-workspace W && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+# rshift - x                 : komorebic focus-named-workspace X && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_space_focus_from_state'
+
+
+# Move windows across workspaces
+lshift + rshift - 1         : komorebic move-to-named-workspace 1 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - 2         : komorebic move-to-named-workspace 2 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - 3         : komorebic move-to-named-workspace 3 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - 4         : komorebic move-to-named-workspace 4 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - 5         : komorebic move-to-named-workspace 5 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - 6         : komorebic move-to-named-workspace 6 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - 7         : komorebic move-to-named-workspace 7 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - 8         : komorebic move-to-named-workspace 8 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - 9         : komorebic move-to-named-workspace 9 && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - a         : komorebic move-to-named-workspace A && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - b         : komorebic move-to-named-workspace B && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - c         : komorebic move-to-named-workspace C && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - d         : komorebic move-to-named-workspace D && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - e         : komorebic move-to-named-workspace E && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+# lshift + rshift - f         : komorebic move-to-named-workspace F && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - g         : komorebic move-to-named-workspace G && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+# lshift + rshift - h         : komorebic move-to-named-workspace H && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - i         : komorebic move-to-named-workspace I && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+# lshift + rshift - j         : komorebic move-to-named-workspace J && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+# lshift + rshift - k         : komorebic move-to-named-workspace K && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+# lshift + rshift - l         : komorebic move-to-named-workspace L && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - m         : komorebic move-to-named-workspace M && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - n         : komorebic move-to-named-workspace N && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - o         : komorebic move-to-named-workspace O && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - p         : komorebic move-to-named-workspace P && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - q         : komorebic move-to-named-workspace Q && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+# lshift + rshift - r         : komorebic move-to-named-workspace R && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - s         : komorebic move-to-named-workspace S && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - t         : komorebic move-to-named-workspace T && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - u         : komorebic move-to-named-workspace U && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - v         : komorebic move-to-named-workspace V && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+lshift + rshift - w         : komorebic move-to-named-workspace W && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
+# lshift + rshift - x         : komorebic move-to-named-workspace X && /bin/bash -lc 'export CONFIG_DIR="$HOME/.config/sketchybar"; source "$CONFIG_DIR/utils/window_manager_utils.sh"; refresh_window_manager_spaces'
