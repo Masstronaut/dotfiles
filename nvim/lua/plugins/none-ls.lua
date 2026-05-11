@@ -36,6 +36,7 @@ return {
       sources = {
         -- Conditional formatters based on config file presence
         require("none-ls.diagnostics.eslint_d").with({
+          timeout = 10000,
           condition = function(utils)
             local bufname = utils.bufname or utils.filename or vim.api.nvim_buf_get_name(0)
             local result = config_exists(eslint_config_files, bufname)

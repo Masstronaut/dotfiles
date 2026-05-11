@@ -1,5 +1,6 @@
 return {
 	"folke/noice.nvim",
+	enabled = true,
 	event = "VeryLazy",
 	-- add any options here
 	opts = {
@@ -21,8 +22,9 @@ return {
 		},
 		cmdline = {
 			format = {
-        -- Set the title of the command popup window
+				-- Skip Treesitter highlighting for `:` until the vim parser is updated.
 				cmdline = {
+					lang = false,
 					title = "nvCommand",
 				},
 			},

@@ -9,7 +9,8 @@ return {
     "williamboman/mason-lspconfig.nvim",
     lazy = false,
     opts = {
-      ensure_installed = { "jsonls", "ts_ls" },
+      ensure_installed = { "jsonls", "svelte", "tailwindcss", "ts_ls" },
+      automatic_enable = false,
     },
   },
   {
@@ -20,32 +21,35 @@ return {
     lazy = false,
     config = function()
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      local mason_lspconfig = require("mason-lspconfig")
-      local lspconfig = require("lspconfig")
-      mason_lspconfig.setup({
-        handlers = {
-          -- Default handler for all servers
-          function(server_name)
-            lspconfig[server_name].setup({
-              capabilities = capabilities,
-            })
-          end,
-          -- TypeScript/JavaScript: disable formatting to avoid conflicts
-          ["ts_ls"] = function()
-            lspconfig.ts_ls.setup({
-              capabilities = capabilities,
-              init_options = {
-                typescript = { format = { enable = false } },
-                javascript = { format = { enable = false } },
-              },
-              on_attach = function(client)
-                client.server_capabilities.documentFormattingProvider = false
-                client.server_capabilities.documentRangeFormattingProvider = false
-              end,
-            })
-          end,
-        },
+
+      vim.lsp.config("jsonls", {
+        capabilities = capabilities,
       })
+      vim.lsp.enable("jsonls")
+
+      vim.lsp.config("svelte", {
+        capabilities = capabilities,
+      })
+      vim.lsp.enable("svelte")
+
+      vim.lsp.config("tailwindcss", {
+        capabilities = capabilities,
+      })
+      vim.lsp.enable("tailwindcss")
+
+      -- TypeScript/JavaScript: disable formatting to avoid conflicts.
+      vim.lsp.config("ts_ls", {
+        capabilities = capabilities,
+        init_options = {
+          typescript = { format = { enable = false } },
+          javascript = { format = { enable = false } },
+        },
+        on_attach = function(client)
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
+        end,
+      })
+      vim.lsp.enable("ts_ls")
       -- Set up the hover window to have a border
       vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Show LSP hover info" })
       vim.keymap.set("n", "<leader>cd", vim.lsp.buf.definition, { desc = "Code: go to Definition" })
