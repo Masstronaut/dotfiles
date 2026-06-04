@@ -121,6 +121,11 @@
 							"kind": "Exe",
 							"id": "Arc",
 							"matching_strategy": "Contains"
+						},
+						{
+							"kind": "Exe",
+							"id": "Zen",
+							"matching_strategy": "Equals"
 						}
 					]
 				},
@@ -152,10 +157,6 @@
 					"layout": "BSP"
 				},
 				{
-					"name": "H",
-					"layout": "BSP"
-				},
-				{
 					"name": "I",
 					"layout": "BSP",
 					"initial_workspace_rules": [
@@ -165,18 +166,6 @@
 							"matching_strategy": "Equals"
 						}
 					]
-				},
-				{
-					"name": "J",
-					"layout": "BSP"
-				},
-				{
-					"name": "K",
-					"layout": "BSP"
-				},
-				{
-					"name": "L",
-					"layout": "BSP"
 				},
 				{
 					"name": "M",
@@ -237,7 +226,7 @@
 					"layout": "BSP",
 					"initial_workspace_rules": [
 						{
-							"kind": "Title",
+							"kind": "Exe",
 							"id": "Ghostty",
 							"matching_strategy": "Equals"
 						}
