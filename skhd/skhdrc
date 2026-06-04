@@ -13,6 +13,10 @@ lshift + rshift - k         : komorebic move up
 lshift + rshift - l         : komorebic move right
 lshift + rshift - return    : komorebic promote
 
+# multi-monitor config
+lshift + rshift - tab		: komorebic cycle-move-workspace-to-monitor next 
+rshift - tab				: komorebic cycle-monitor next
+
 # Stack windows
 lshift + rshift - left       : komorebic stack left
 lshift + rshift - down       : komorebic stack down
