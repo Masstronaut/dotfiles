@@ -43,6 +43,7 @@ lshift + rshift	- f			: komorebic toggle-monocle
 
 # Window manager options
 lshift + rshift	- r		: komorebic retile
+lshift + rshift - 0x2A	: /bin/zsh -c 'komorebic stop; komorebic start; sketchybar --reload'
 rshift			- p		: komorebic toggle-pause
 rshift			- 0		: komorebic toggle-window-container-behaviour
 
